@@ -1,0 +1,7 @@
+openai
+python-dotenv
+requests
+pyodbc
+streamlit
+streamlit_chat
+streamlit-scrollable-textbox
