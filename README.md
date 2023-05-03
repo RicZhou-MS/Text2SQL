@@ -25,3 +25,12 @@ DB_NAME=<your Azure SQL DB database name, e.g. AdventureWorks>
 DB_USER=<your Azure SQL DB user name>
 DB_USER_PASS=<your Azure SQL DB user password>
 ```
+
+## Prepare DB Schema
+1. Open your project folder with VS code
+2. Run `ExportDBSchema.py`, it will access your Azure SQL DB and grab all tables and columns, the table definition will be saved as `DBSchema.txt` at same folder.
+
+## Run Application
+1. Run command `streamlit run Chat_to_SQL.py`, it will start browser and access corresponding url automatically.
+
+**NOTE**: Streamlit by default is locally access only, you can refer to articles on internet if you want to publish streamlit to Azure app service or other hostings.
