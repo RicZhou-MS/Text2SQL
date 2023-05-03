@@ -32,7 +32,7 @@ DB_USER_PASS=<your Azure SQL DB user password>
 
 ## Run Application
 1. Run command `streamlit run Chat_to_SQL.py`, it will start browser and access corresponding url automatically.
-2. If you host the application inside an Auzre IaaS VM which has public IP attached, you can use following command to start the application with public IP accessible
+2. If you host the application inside an Auzre IaaS VM which has public IP attached, you can use following command to start the application with internet accessible via the public IP.
 `streamlit run .\Chat_to_SQL.py --server.headless=true`
 
 **NOTE**: You can search and refer to articles on internet if you want to publish streamlit to Azure app service or other hostings.
