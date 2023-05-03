@@ -21,7 +21,7 @@ class GlobalContext:
 """
 
     FewShot_Prompt = ""
-    few_shot_user_msg1 = '''"AWC Logo Cap"这个产品销售最好的三个城市是哪些？'''
+    few_shot_user_msg1 = '''What are the three best selling cities for the "AWC Logo Cap" product?''' #'''"AWC Logo Cap"这个产品销售最好的三个城市是哪些？'''
     few_shot_ai_msg1 = """SELECT TOP 3 A.City, sum(SOD.LineTotal) AS TotalSales  
 FROM [SalesLT].[SalesOrderDetail] SOD  
 JOIN [SalesLT].[Product] P ON SOD.ProductID = P.ProductID  
