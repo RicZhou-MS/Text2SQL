@@ -10,7 +10,7 @@ This project is made to demo Azure openAI capability (gpt-4, gpt-turbo, gpt-4-32
 
 ## Application Installation
 1. Install Python runtime (This repo is developed with Python 3.11.2)
-2. Clone the project onto your local Windows, install the python dependencies:
+2. Clone the project onto your local, install the python dependencies:
 ```
 pip install -r ./requirements.txt
 ```
