@@ -166,9 +166,9 @@ def Initialize_SideBar():
         st.text_area('System message', height=175, key="sidebar_system_msg")
     # Using object notation
     st.sidebar.text_area('few-shot user message', height=30, key="few_shot_user_msg1")
-    st.sidebar.text_area('few-shot AI msssage', height=100, key="few_shot_ai_msg1")
+    st.sidebar.text_area('few-shot AI messsage', height=100, key="few_shot_ai_msg1")
     st.sidebar.text_area('few-shot user message', height=30, key="few_shot_user_msg2")
-    st.sidebar.text_area('few-shot AI msssage', height=100, key="few_shot_ai_msg2")
+    st.sidebar.text_area('few-shot AI messsage', height=100, key="few_shot_ai_msg2")
 
 
 def Initialize_MainPage():
