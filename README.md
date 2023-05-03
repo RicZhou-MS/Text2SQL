@@ -6,7 +6,7 @@ This project is made to demo Azure openAI capability (gpt-4, gpt-turbo, gpt-4-32
 ## Prepare Azure SQL DB
 1. Prepare your existing business Azure SQL DB, or [create a sample Azure SQL database](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms#deploy-new-sample-database) for demo
 2. Collect the SQL DB server name, database name, user and password for later use
-3. Make user your SQL DB network firewall settings allow access from your application
+3. Make sure your SQL DB firewall settings allow access from your application
 
 ## Application Installation
 1. Install Python runtime (This repo is developed with Python 3.11.2)
@@ -33,4 +33,4 @@ DB_USER_PASS=<your Azure SQL DB user password>
 ## Run Application
 1. Run command `streamlit run Chat_to_SQL.py`, it will start browser and access corresponding url automatically.
 
-**NOTE**: Streamlit by default is locally access only, you can refer to articles on internet if you want to publish streamlit to Azure app service or other hostings.
+**NOTE**: Streamlit by default is locally access only, you can search and refer to articles on internet if you want to publish streamlit to Azure app service or other hostings.
