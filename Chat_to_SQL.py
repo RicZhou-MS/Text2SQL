@@ -1,10 +1,6 @@
 import streamlit as st
-import streamlit.components.v1 as components
-import streamlit_scrollable_textbox as stx
 import pyodbc
-import numpy as np
-import time
-# from streamlit_chat import message as st_message
+import pandas as pd
 import openai
 from GlobalClasses import *
 
@@ -35,9 +31,10 @@ def init_connection():
 
 def run_query(query):
     db_conn = init_connection()
-    with db_conn.cursor() as cur:
-        cur.execute(query)
-        return cur.fetchall()
+    df = pd.read_sql(query, db_conn)
+    db_conn.close()
+    return df
+
 
 # read DBSchema.txt
 def Get_system_message_from_file():
@@ -114,11 +111,15 @@ def Run_SQL():
         return
     with container_SQL_Result.container():
         with st.spinner("Running SQL..."):
-            st.session_state["SQL_Result"] = run_query(st.session_state.SQL_Statement_Generated)
-    container_SQL_Result.write(st.session_state.SQL_Result)
+            st.session_state["SQL_Result_df"] = run_query(st.session_state.SQL_Statement_Generated)
+    # container_SQL_Result.write(st.session_state.SQL_Result_df)
     
 
 def Show_Diagram():
+    if (st.session_state["show_chart"] ):
+        st.session_state["show_chart"] = False
+    else:
+        st.session_state["show_chart"] = True
     return
 
 def Process_User_Input():
@@ -128,6 +129,8 @@ def Process_User_Input():
     Add_Chat_History("user", st.session_state.latest_user_input)
     st.session_state.user_input = "" # clear user input
     st.session_state["SQL_Statement_Generated"] = "" # clear SQL statement
+    st.session_state["SQL_Result_df"] = None # clear SQL result
+    st.session_state["show_chart"] = False # clear chart
     container_Chat.success(st.session_state.latest_user_input)
     Update_ChatCompletion_message()
     st.session_state.user_input_disabled = True
@@ -138,11 +141,10 @@ def Process_User_Input():
             st.session_state["gpt_response"] = response
             st.session_state["latest_ai_response"] = response.choices[0].message.content
             Add_Chat_History("assistant", st.session_state["latest_ai_response"])
-            with container_Chat.expander("AI return", expanded=False):
+            with container_Chat.expander("AI return", expanded=True):
                 st.code(st.session_state["latest_ai_response"], language='sql')
-                # st.write(st.session_state["latest_ai_response"])
                 st.write(st.session_state["gpt_response"].usage)
-            st.session_state["SQL_Statement_Generated"] = st.session_state["latest_ai_response"] # update SQL statement
+            st.session_state["SQL_Statement_Generated"] = st.session_state["latest_ai_response"].replace("\\n", "\n") # update SQL statement
             st.session_state.user_input_disabled = False
     return
 
@@ -173,11 +175,11 @@ def Initialize_MainPage():
 
     global col_Chat, col_SQL, container_Chat, wait_container, container_SQL, container_SQL_Result, container_Diagram
  
-    st.title('Azure OpenAI _Chat to_ :blue[SQL] :sunglasses:')
+    st.markdown('<h2 style="text-align: center;background-color:SlateBlue;color:White">Azure OpenAI Chat to SQL</h2><p/>', unsafe_allow_html=True)
  
     col_Chat, col_SQL = st.columns([2,3],gap="medium")
 
-    col_Chat.title("Chat")
+    col_Chat.markdown("### :speech_balloon: Chat")
     col_Chat.divider()
     col_Chat.button("Clear Chat History", key="clear_chat_history", on_click=Clear_Chat_History)
     container_Chat = col_Chat.container()
@@ -189,22 +191,40 @@ def Initialize_MainPage():
     with col_Chat.expander("Prompt", expanded=False):
         st.write(Get_ChatCompletion_message())
 
-    col_SQL.title("SQL")
+    col_SQL.markdown("### :sunglasses: :blue[SQL] ")
     col_SQL.divider()
     container_SQL = col_SQL.empty()
     if "SQL_Statement_Generated" not in st.session_state:
         st.session_state["SQL_Statement_Generated"] = ""
     container_SQL.text_area('SQL Statement Generated', height=30, key="SQL_Statement_Generated")
-    col_SQL.button("Run SQL", key="run_sql", on_click=Run_SQL)
-    col_SQL.divider()
-    container_SQL_Result = col_SQL.empty()
-    if "SQL_Result" in st.session_state:
-        container_SQL_Result.success(st.session_state.SQL_Result)
 
-    col_SQL.button("Show Diagram", key="show_diagram", on_click=Show_Diagram)
     col_SQL.divider()
+    col_SQL.button("Run SQL", key="run_sql", on_click=Run_SQL)
+    container_SQL_Result = col_SQL.empty()
+    if "SQL_Result_df" in st.session_state and st.session_state.SQL_Result_df is not None:
+        df = st.session_state.SQL_Result_df
+        container_SQL_Result.markdown(df.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        #container_SQL_Result.dataframe(st.session_state.SQL_Result_df)
+
+    col_SQL.divider()
+    if "chart_type" not in st.session_state:
+        st.session_state["chart_type"] = "Bar Chart"
+    col_SQL.radio("Chart Type", ("Bar Chart", "Area Chart", "Line Chart"), key="chart_type",horizontal=True)
+    col_SQL.button("Diagram", key="show_diagram", on_click=Show_Diagram)
     container_Diagram = col_SQL.empty()
-    container_Diagram.success("Diagram")
+    if "show_chart" in st.session_state and st.session_state["show_chart"]:
+        if "SQL_Result_df" in st.session_state and st.session_state.SQL_Result_df is not None:
+            with container_Diagram:
+                if st.session_state.chart_type == "Bar Chart":
+                    #plt.figure()
+                    #st.image(st.session_state.SQL_Result_df.plot.bar())
+                    st.bar_chart(st.session_state.SQL_Result_df)
+                elif st.session_state.chart_type == "Area Chart":
+                    st.area_chart(st.session_state.SQL_Result_df)
+                elif st.session_state.chart_type == "Line Chart":
+                    st.line_chart(st.session_state.SQL_Result_df)
+
+    #container_Diagram.success("Diagram")
     
 GlobalContext()  # initialize global context
 
@@ -216,29 +236,10 @@ container_SQL = None
 container_SQL_Result = None
 container_Diagram = None
 
-# if Get_Chat_History() == []:
-#     Add_Chat_History("user","Hi")
-#     Add_Chat_History("assistant","Hi")
-#     Add_Chat_History("user","How are you?")
-#     Add_Chat_History("assistant","I am fine, thank you.")
-#     Add_Chat_History("user","What is the table definition?")
-#     Add_Chat_History("assistant","The table definition is as follows: ...")
-
 Initialize_SideBar()
 Initialize_MainPage()
 
-
-
-
-if st.button('display'):
-    st.write( "DRIVER={ODBC Driver 17 for SQL Server};SERVER="
-        + GlobalContext.DB_SERVER
-        + ";DATABASE="
-        + GlobalContext.DB_NAME
-        + ";UID="
-        + GlobalContext.DB_USER
-        + ";PWD="
-        + GlobalContext.DB_USER_PASS)
+#if st.button('display'):
     #st.write(st.session_state["gpt_response"])
     #st.write(Get_Chat_History())
     # st.write(Get_ChatCompletion_message())

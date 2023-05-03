@@ -2,6 +2,5 @@ openai
 python-dotenv
 requests
 pyodbc
+pandas
 streamlit
-streamlit_chat
-streamlit-scrollable-textbox
