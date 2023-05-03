@@ -36,6 +36,6 @@ DB_USER_PASS=<your Azure SQL DB user password>
 **Option 2 - Run inside Azure VM**: If you host the application inside an Auzre IaaS VM which has public IP attached, you can use `streamlit run .\Chat_to_SQL.py --server.headless=true` to start the application with internet accessible via the public IP. 
 
 **Option 3 - Run with github codespace**: If you run the application with Github codespace, you can use `streamlit run Chat_to_SQL.py --server.enableCORS=false --server.enableXsrfProtection=false`
-**NOTE:** When using github codespace, follow [the KB](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/setting-up-your-python-project-for-codespaces) to configure predefined dev container. and alos follow [this](https://github.com/mkleehammer/pyodbc/wiki/Install#debian-stretch) to install pyodbc dependency in Linux environment.
+(**NOTE:** When using github codespace, follow [the KB](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/setting-up-your-python-project-for-codespaces) to configure predefined dev container. and alos follow [this](https://github.com/mkleehammer/pyodbc/wiki/Install#debian-stretch) to install pyodbc dependency in Linux environment.)
 
 **Option 4**: You can search and refer to articles on internet if you want to publish streamlit to Azure app service or other hostings.
