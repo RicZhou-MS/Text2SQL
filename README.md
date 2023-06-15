@@ -1,6 +1,9 @@
 # Chat to SQL
 
-This project is made to demo Azure openAI capability (gpt-4, gpt-turbo, gpt-4-32k) for text to SQL. It can grab DB schema (table and columns) from specific SQL database for composing appropriate prompt. The streamlit GUI supports user to ask question, and then it calles GPT to return SQL statement based on DB table definition for user question. it supports multi turn conversation.
+This project is made to demo Azure openAI capability (gpt-4, gpt-turbo, gpt-4-32k) for text to SQL. It can grab DB schema (table and columns) from specific SQL database for composing appropriate prompt. 
+![image](https://github.com/RicZhou-MS/Text2SQL/assets/75886466/07eb39ca-2177-4e24-974c-f29c8b06d853)
+
+The streamlit GUI supports user to ask question, and then it calles GPT to return SQL statement based on DB table definition for user question. it supports multi turn conversation.
 ![image](https://user-images.githubusercontent.com/75886466/235889811-72df9218-b64a-467d-b89d-9c73d5346aee.png)
 
 ## Prepare Azure SQL DB
