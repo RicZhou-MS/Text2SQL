@@ -187,7 +187,7 @@ def Initialize_MainPage():
     wait_container = col_Chat.empty()
     if "user_input_disabled" not in st.session_state:
         st.session_state["user_input_disabled"] = False
-    col_Chat.text_input("User Input", key="user_input",disabled=st.session_state.user_input_disabled,on_change=Process_User_Input)
+    col_Chat.text_input("User Input", key="user_input",disabled=st.session_state["user_input_disabled"],on_change=Process_User_Input)
     with col_Chat.expander("Prompt", expanded=False):
         st.write(Get_ChatCompletion_message())
 
